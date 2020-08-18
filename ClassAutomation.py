@@ -56,6 +56,7 @@ def init_file(w, t, z):
         {"name": "Zoom", "path": z, "needs_to_execute": 0, "days":[]}]}
 
 def main():
+    """Main function of ClassAutomation"""
     pass
 
 
