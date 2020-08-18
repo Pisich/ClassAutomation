@@ -3,9 +3,11 @@ import os
 import pyautogui
 import getpass
 import json
+import datetime
 
 name = getpass.getuser()
 file_info = ""
+date = datetime.datetime.now()
 
 def find_webex():
     """Function that finds Cisco Webex Meetings executable"""
@@ -57,10 +59,21 @@ def init_file(w, t, z):
 
 def main():
     """Main function of ClassAutomation"""
-    pass
+    global file_info, date
+    dumpling = file_info["information"]
+    day = date.strftime("%A").lower()
+    time = date.strftime("%H") + ":" + date.strftime("%M")
+    for i in dumpling:
+        if i["needs_to_execute"] == 1:
+            dumpling = i["days"]
+            for f in dumpling:
+                if day in f and time in f:
+                    subprocess.Popen(i["path"])
 
 
 if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
+    #while True:
+    date = datetime.datetime.now()
     main()
 else:
     webex_path = find_webex()
@@ -68,6 +81,9 @@ else:
     zoom_path = find_zoom()
     init_file(webex_path, teams_path, zoom_path)
     ask_program()
+    #while True:
+    date = datetime.datetime.now()
+    main()
 
 with open(r"C:\Users\Public\Documents\info.json", "w") as info:
     json.dump(file_info, info)
