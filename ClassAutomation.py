@@ -11,6 +11,50 @@ name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
 
+def launch_webex(meeting=""):
+    """If called, will launch Cisco Webex and join a certain meeting if was specified"""
+    global file_info
+    dumpling = file_info["information"][0]
+    subprocess.Popen(dumpling["path"])
+    time.sleep(5)
+    try:
+        meeting = meeting.split(" ")
+        if meeting[2]:
+            pyautogui.click(1603, 309, duration=0.25)
+            time.sleep(2)
+            pyautogui.typewrite(meeting[2])
+            pyautogui.click(1833, 311, duration=0.25)
+    except IndexError:
+        pass
+    time.sleep(55)
+
+def launch_teams(meeting=""):
+    """If called, will launch Microsoft Teams and join a certain meeting if was specified"""
+    global file_info
+    dumpling = file_info["information"][1]
+    subprocess.Popen()
+    time.sleep(5)
+    pyautogui.click(65, 225, duration=0.25)
+    pyautogui.click(65, 225, duration=0.25)
+    time.sleep(55)
+
+def launch_zoom(meeting=""):
+    """If called, will launch Zoom and join a certain meeting if was specified"""
+    global file_info
+    dumpling = file_info["information"][2]
+    subprocess.Popen()
+    time.sleep(5)
+    try:
+        meeting = meeting.split(" ")
+        if meeting[2]:
+            pyautogui.click(970, 514, duration=0.25)
+            time.sleep(2)
+            pyautogui.click(907, 467, duration=0.25)
+            pyautogui.typewrite(meeting[2])
+    except IndexError:
+        pass
+    time.sleep(55)
+
 def find_webex():
     """Function that finds Cisco Webex Meetings executable"""
     path1 = rf'C:\Users\{name}\AppData\Local\WebEx\WebEx\Applications\ptoneclk.exe'
@@ -42,6 +86,7 @@ def ask_program():
     """Function will ask to the user which programs to open"""
     global file_info
     dumpling = file_info["information"]
+    print("Input format: 'day' 'time' 'conference id'\nConference id is OPTIONAL")
     for i in dumpling:
         if i["path"]:
             selec = input(f"Hello {name}, you have {i['name']} available to execute, would you like to program a schedule for it? ")
@@ -86,11 +131,15 @@ def main():
         times = times[1:]
     for i in dumpling:
         if i["needs_to_execute"] == 1:
-            dumpling = i["days"]
-            for f in dumpling:
+            dumpling2 = i["days"]
+            for f in dumpling2:
                 if day in f and times in f:
-                    subprocess.Popen(i["path"])
-                    time.sleep(61)
+                    if "Webex" in i["name"]:
+                        launch_webex(f)
+                    elif "Teams" in i["name"]:
+                        launch_teams(f)
+                    elif "Zoom" in i["name"]:
+                        launch_zoom(f)
 
 
 if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
