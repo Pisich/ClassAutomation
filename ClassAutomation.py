@@ -4,6 +4,8 @@ import pyautogui
 import getpass
 import json
 import datetime
+import time
+import win32com.client
 
 name = getpass.getuser()
 file_info = ""
@@ -57,33 +59,56 @@ def init_file(w, t, z):
         {"name": "Microsoft Teams", "path": t, "needs_to_execute": 0, "days":[]},
         {"name": "Zoom", "path": z, "needs_to_execute": 0, "days":[]}]}
 
+def add_to_startup_and_shortcut(file_path=""):
+    if file_path == "":
+        file_path = os.path.dirname(os.path.realpath(__file__))
+    file_name = r"\ClassAutomation"
+    bat_path = r'C:\Users\%s\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup' % name
+    with open(bat_path + '\\' + "open.bat", "w+") as bat_file:
+        bat_file.write(r'start "" C:/Users/Public/Documents%s.lnk' % file_name)
+    desktop = r'C:/Users/Public/Documents'
+    path = os.path.join(desktop, 'ClassAutomation.lnk')
+    target = file_path + file_name + ".exe"
+
+    shell = win32com.client.Dispatch("WScript.Shell")
+    shortcut = shell.CreateShortCut(path)
+    shortcut.Targetpath = target
+    shortcut.WindowStyle = 7
+    shortcut.save()
+
 def main():
     """Main function of ClassAutomation"""
     global file_info, date
     dumpling = file_info["information"]
     day = date.strftime("%A").lower()
-    time = date.strftime("%H") + ":" + date.strftime("%M")
+    times = date.strftime("%H") + ":" + date.strftime("%M")
+    if times[0] == "0":
+        times = times[1:]
     for i in dumpling:
         if i["needs_to_execute"] == 1:
             dumpling = i["days"]
             for f in dumpling:
-                if day in f and time in f:
+                if day in f and times in f:
                     subprocess.Popen(i["path"])
+                    time.sleep(61)
 
 
 if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
-    #while True:
-    date = datetime.datetime.now()
-    main()
+    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
+        file_info = json.load(info)
+    while True:
+        date = datetime.datetime.now()
+        main()
 else:
     webex_path = find_webex()
     teams_path = find_teams()
     zoom_path = find_zoom()
     init_file(webex_path, teams_path, zoom_path)
     ask_program()
-    #while True:
-    date = datetime.datetime.now()
-    main()
+    add_to_startup_and_shortcut()
+    while True:
+        date = datetime.datetime.now()
+        main()
 
 with open(r"C:\Users\Public\Documents\info.json", "w") as info:
     json.dump(file_info, info)
