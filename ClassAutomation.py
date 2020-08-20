@@ -6,6 +6,7 @@ import json
 import datetime
 import time
 import win32com.client
+from selenium import webdriver
 
 name = getpass.getuser()
 file_info = ""
@@ -81,6 +82,11 @@ def find_zoom():
         return path0
     else:
         return False
+
+def find_browser():
+    """Finds the default web browser in the users machine and if it is Google Chrome, return its path"""
+    #Work in progress
+    pass
 
 def ask_program():
     """Function will ask to the user which programs to open"""
