@@ -85,8 +85,10 @@ def find_zoom():
 
 def find_browser():
     """Finds the default web browser in the users machine and if it is Google Chrome, return its path"""
-    #Work in progress
-    pass
+    with open(HKEY_CURRENT_USER, r"Software\Clients\StartMenuInternet") as key:
+        pass
+    if cmd == "ChromeHTML" and os.path.isfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"):
+        pass
 
 def ask_program():
     """Function will ask to the user which programs to open"""
