@@ -27,7 +27,7 @@ def launch_webex(meeting=""):
             pyautogui.click(1833, 311, duration=0.25)
     except IndexError:
         pass
-    time.sleep(55)
+    time.sleep(56)
 
 def launch_teams(meeting=""):
     """If called, will launch Microsoft Teams and join a certain meeting if was specified"""
@@ -37,7 +37,7 @@ def launch_teams(meeting=""):
     time.sleep(5)
     pyautogui.click(65, 225, duration=0.25)
     pyautogui.click(65, 225, duration=0.25)
-    time.sleep(55)
+    time.sleep(56)
 
 def launch_zoom(meeting=""):
     """If called, will launch Zoom and join a certain meeting if was specified"""
@@ -54,7 +54,22 @@ def launch_zoom(meeting=""):
             pyautogui.typewrite(meeting[2])
     except IndexError:
         pass
-    time.sleep(55)
+    time.sleep(56)
+
+def launch_meet(meeting=""):
+    """Launches Google Chrome if available and enters Google Meet site"""
+    driver = webdriver.Chrome()
+    driver.get('https://meet.google.com/')
+    time.sleep(5)
+    try:
+        meeting = meeting.split(" ")
+        if meeting[2]:
+            driver.find_element_by_xpath('//*[@id="page-content"]/section[1]/div/div[1]/div[2]/div/div[2]/input').send_keys(meeting[2])
+            time.sleep(1)
+            driver.find_element_by_xpath('//*[@id="page-content"]/section[1]/div/div[1]/div[2]/div/div[2]/a/button').click()
+    except IndexError:
+        pass
+    time.sleep(56)
 
 def find_webex():
     """Function that finds Cisco Webex Meetings executable"""
@@ -85,10 +100,11 @@ def find_zoom():
 
 def find_browser():
     """Finds the default web browser in the users machine and if it is Google Chrome, return its path"""
-    with open(HKEY_CURRENT_USER, r"Software\Clients\StartMenuInternet") as key:
-        pass
-    if cmd == "ChromeHTML" and os.path.isfile(r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"):
-        pass
+    path0 = r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
+    if os.path.isfile(path0):
+        return path0
+    else:
+        return False
 
 def ask_program():
     """Function will ask to the user which programs to open"""
@@ -105,12 +121,13 @@ def ask_program():
                     i['days'].append(selec)
                 i["days"].pop()  
 
-def init_file(w, t, z):
+def init_file(w, t, z, m):
     """Does the initial setup for the configuration file"""
     global file_info
     file_info = {"information": [{"name": "Cisco Webex", "path": w, "needs_to_execute": 0, "days": []},
         {"name": "Microsoft Teams", "path": t, "needs_to_execute": 0, "days":[]},
-        {"name": "Zoom", "path": z, "needs_to_execute": 0, "days":[]}]}
+        {"name": "Zoom", "path": z, "needs_to_execute": 0, "days":[]},
+        {"name": "Google Meet", "path": m, "needs_to_execute": 0, "days":[]}]}
 
 def add_to_startup_and_shortcut(file_path=""):
     if file_path == "":
@@ -148,6 +165,8 @@ def main():
                         launch_teams(f)
                     elif "Zoom" in i["name"]:
                         launch_zoom(f)
+                    elif "Meet" in i["name"]:
+                        launch_meet(f)
 
 
 if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
@@ -160,7 +179,8 @@ else:
     webex_path = find_webex()
     teams_path = find_teams()
     zoom_path = find_zoom()
-    init_file(webex_path, teams_path, zoom_path)
+    meet_path = find_browser()
+    init_file(webex_path, teams_path, zoom_path, meet_path)
     ask_program()
     add_to_startup_and_shortcut()
     while True:
