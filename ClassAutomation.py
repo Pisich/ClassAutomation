@@ -183,9 +183,8 @@ else:
     init_file(webex_path, teams_path, zoom_path, meet_path)
     ask_program()
     add_to_startup_and_shortcut()
+    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
+        json.dump(file_info, info)
     while True:
         date = datetime.datetime.now()
         main()
-
-with open(r"C:\Users\Public\Documents\info.json", "w") as info:
-    json.dump(file_info, info)
