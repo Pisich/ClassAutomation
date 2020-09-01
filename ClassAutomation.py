@@ -250,7 +250,7 @@ def gui_webex():
     OptionMenu(root, webex_day, *day_list).place(x=200, y=195)
     Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
     Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
-    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
+    Label(root, text="Session: (Optional)", font=("Arial", 16)).place(x=350, y=150)
     if teams == True:
         Button(root, text="Skip to Microsoft Teams", command=gui_teams, font=("Arial", 7)).place(x=470, y=5)
     elif zoom == True:
@@ -260,11 +260,9 @@ def gui_webex():
 def gui_teams():
     """Enter schedule details if Microsoft Teams is available"""
     global zoom, teams_day, teams_link, teams_time, day_list
-    teams_link = StringVar()
     teams_day = StringVar()
     teams_time = StringVar()
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
-    Entry(root, textvariable=teams_link, width=20).place(x=350, y=200)
     Button(root, text="Submit", font=("Arial", 10), command=teams_getter).place(x=550, y=270)
     Entry(root, textvariable=teams_time, width=10).place(x=40, y=200)
     OptionMenu(root, teams_day, *day_list).place(x=200, y=195)
@@ -272,7 +270,6 @@ def gui_teams():
     Label(root, text="Build your Microsoft Teams schedule!", font=("Arial", 14)).place(x=110, y=1)
     Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
     Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
-    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
     if zoom == True:
         Button(root, text="Skip to Zoom", command=gui_zoom, font=("Arial", 7)).place(x=500, y=5)
 
@@ -289,7 +286,7 @@ def gui_zoom():
     OptionMenu(root, zoom_day, *day_list).place(x=200, y=195)
     Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
     Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
-    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
+    Label(root, text="Session: (Optional)", font=("Arial", 16)).place(x=350, y=150)
     Button(root, text="Done", font=("Arial", 12), command= lambda: root.destroy()).place(x=500, y=5)
     root.title("ClassAutomation: Zoom")
     Label(root, text="Build your Zoom schedule!", font=("Arial", 14)).place(x=110, y=1)
@@ -301,7 +298,7 @@ def gui():
     root.title("ClassAutomation")
     root.geometry("620x310")
     root.iconbitmap(path + r"\src\icon.ico")
-    Label(root, text=f"Welcome to ClassAutomation {name}!", font=("Arial", 18)).place(x=50, y=0)
+    Label(root, text="Welcome to ClassAutomation Pisich!", font=("Arial", 18)).place(x=50, y=0)
     if webex == True:
         Button(root, text="Create Cisco Webex schedule", command=gui_webex, font=("Arial", 14)).place(x=145, y=160)
     elif teams == True:
