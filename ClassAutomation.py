@@ -13,9 +13,16 @@ name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
 webex = True
-teams = False
+teams = True
 zoom = True
 root = ""
+webex_day= ""
+webex_link= ""
+webex_time= ""
+day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+teams_day = ""
+teams_link = ""
+teams_time = ""
 
 def launch_webex(meeting=""):
     """If called, will launch Cisco Webex and join a certain meeting if was specified"""
@@ -203,10 +210,20 @@ def main():
 
 def gui_webex():
     """Enter schedule details if Cisco Webex is available"""
-    global webex, teams, zoom
+    global teams, zoom, webex_time, webex_day, webex_link, day_list
+    webex_link = StringVar()
+    webex_day = StringVar()
+    webex_time = StringVar()
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
     root.title("ClassAutomation: Cisco Webex")
     Label(root, text="Build your Cisco Webex schedule!", font=("Arial", 14)).place(x=110, y=1)
+    Entry(root, textvariable=webex_link, width=20).place(x=350, y=200)
+    Button(root, text="Submit", font=("Arial", 10)).place(x=550, y=270)
+    Entry(root, textvariable=webex_time, width= 10).place(x=40, y=200)
+    OptionMenu(root, webex_day, *day_list).place(x=200, y=195)
+    Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
+    Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
+    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
     if teams == True:
         Button(root, text="Skip to Microsoft Teams", command=gui_teams, font=("Arial", 7)).place(x=470, y=5)
     elif zoom == True:
@@ -215,15 +232,25 @@ def gui_webex():
 
 def gui_teams():
     """Enter schedule details if Microsoft Teams is available"""
+    global zoom, teams_day, teams_link, teams_time, day_list
+    teams_link = StringVar()
+    teams_day = StringVar()
+    teams_time = StringVar()
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
+    Entry(root, textvariable=teams_link, width=20).place(x=350, y=200)
+    Button(root, text="Submit", font=("Arial", 10)).place(x=550, y=270)
+    Entry(root, textvariable=teams_time, width= 10).place(x=40, y=200)
+    OptionMenu(root, teams_day, *day_list).place(x=200, y=195)
     root.title("ClassAutomation: Microsoft Teams")
-    Label(root, text="Build your Microsoft Teams schedule!").place(x=40, y=0)
+    Label(root, text="Build your Microsoft Teams schedule!", font=("Arial", 14)).place(x=110, y=1)
+    if zoom == True:
+        Button(root, text="Skip to Zoom", command=gui_teams, font=("Arial", 7)).place(x=500, y=5)
 
 def gui_zoom():
     """Enter schedule details if Zoom is available"""
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
     root.title("ClassAutomation: Zoom")
-    Label(root, text="Build your Zoom schedule!").place(x=40, y=0)
+    Label(root, text="Build your Zoom schedule!").place(x=40, y=1)
 
 def gui():
     """Main window to enter schedule details"""
