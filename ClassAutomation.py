@@ -12,6 +12,7 @@ from tkinter import *
 name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
+path = os.path.dirname(os.path.abspath(__file__))
 webex = False
 teams = False
 zoom = False
@@ -298,6 +299,7 @@ def gui():
     global root, webex, teams, zoom
     root = Tk()
     root.title("ClassAutomation")
+    root.iconbitmap(path + r"\src\icon.ico")
     root.geometry("620x310")
     Label(root, text=f"Welcome to ClassAutomation {name}!", font=("Arial", 18)).place(x=50, y=0)
     if webex == True:
