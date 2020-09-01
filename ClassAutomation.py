@@ -12,9 +12,9 @@ from tkinter import *
 name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
-webex = True
-teams = True
-zoom = True
+webex = False
+teams = False
+zoom = False
 root = ""
 webex_day= ""
 webex_link= ""
@@ -23,6 +23,9 @@ day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", 
 teams_day = ""
 teams_link = ""
 teams_time = ""
+zoom_time = ""
+zoom_day = ""
+zoom_link = ""
 
 def launch_webex(meeting=""):
     """If called, will launch Cisco Webex and join a certain meeting if was specified"""
@@ -186,27 +189,50 @@ def main():
                         launch_zoom(f)
                     elif "Meet" in i["name"]:
                         launch_meet(f)
+                    
+#START OF GUI->
 
+def webex_getter():
+    """Will add a new Cisco Webex schedule"""
+    global webex_time, webex_day, webex_link, file_info
+    if webex_day.get() and webex_time.get():
+        dumpling = file_info["information"][0]
+        dumpling["needs_to_execute"] = 1
+        if webex_link.get():
+            val = webex_day.get() + " " + webex_time.get() + " " + webex_link.get()
+        else:
+            val = webex_day.get() + " " + webex_time.get()
+        dumpling["days"].append(val)
+    else:
+        pass
 
-#if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
-#    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
-#        file_info = json.load(info)
-#    while True:
-#        date = datetime.datetime.now()
-#        main()
-#else:
-#    webex_path = find_webex()
-#    teams_path = find_teams()
-#    zoom_path = find_zoom()
-#    meet_path = find_browser()
-#    init_file(webex_path, teams_path, zoom_path, meet_path)
-#    ask_program()
-#    add_to_startup_and_shortcut()
-#    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
-#        json.dump(file_info, info)
-#    while True:
-#        date = datetime.datetime.now()
-#        main()
+def teams_getter():
+    """Will add a new Microsoft Teams schedule"""
+    global teams_time, teams_day, teams_link, file_info
+    if teams_day.get() and teams_time.get():
+        dumpling = file_info["information"][1]
+        dumpling["needs_to_execute"] = 1
+        if teams_link.get():
+            val = teams_day.get() + " " + teams_time.get() + " " + teams_link.get()
+        else:
+            val = teams_day.get() + " " + teams_time.get()
+        dumpling["days"].append(val)
+    else:
+        pass
+
+def zoom_getter():
+    """Will add a new Zoom schedule"""
+    global zoom_time, zoom_day, zoom_link, file_info
+    if zoom_day.get() and zoom_time.get():
+        dumpling = file_info["information"][2]
+        dumpling["needs_to_execute"] = 1
+        if zoom_link.get():
+            val = zoom_day.get() + " " + zoom_time.get() + " " + zoom_link.get()
+        else:
+            val = zoom_day.get() + " " + zoom_time.get()
+        dumpling["days"].append(val)
+    else:
+        pass
 
 def gui_webex():
     """Enter schedule details if Cisco Webex is available"""
@@ -218,8 +244,8 @@ def gui_webex():
     root.title("ClassAutomation: Cisco Webex")
     Label(root, text="Build your Cisco Webex schedule!", font=("Arial", 14)).place(x=110, y=1)
     Entry(root, textvariable=webex_link, width=20).place(x=350, y=200)
-    Button(root, text="Submit", font=("Arial", 10)).place(x=550, y=270)
-    Entry(root, textvariable=webex_time, width= 10).place(x=40, y=200)
+    Button(root, text="Submit", font=("Arial", 10), command=webex_getter).place(x=550, y=270)
+    Entry(root, textvariable=webex_time, width=10).place(x=40, y=200)
     OptionMenu(root, webex_day, *day_list).place(x=200, y=195)
     Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
     Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
@@ -238,19 +264,34 @@ def gui_teams():
     teams_time = StringVar()
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
     Entry(root, textvariable=teams_link, width=20).place(x=350, y=200)
-    Button(root, text="Submit", font=("Arial", 10)).place(x=550, y=270)
-    Entry(root, textvariable=teams_time, width= 10).place(x=40, y=200)
+    Button(root, text="Submit", font=("Arial", 10), command=teams_getter).place(x=550, y=270)
+    Entry(root, textvariable=teams_time, width=10).place(x=40, y=200)
     OptionMenu(root, teams_day, *day_list).place(x=200, y=195)
     root.title("ClassAutomation: Microsoft Teams")
     Label(root, text="Build your Microsoft Teams schedule!", font=("Arial", 14)).place(x=110, y=1)
+    Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
+    Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
+    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
     if zoom == True:
-        Button(root, text="Skip to Zoom", command=gui_teams, font=("Arial", 7)).place(x=500, y=5)
+        Button(root, text="Skip to Zoom", command=gui_zoom, font=("Arial", 7)).place(x=500, y=5)
 
 def gui_zoom():
     """Enter schedule details if Zoom is available"""
+    global zoom_day, zoom_link, zoom_time, day_list
+    zoom_link = StringVar()
+    zoom_day = StringVar()
+    zoom_time = StringVar()
     Canvas(root, width=1000, height=1000).place(x=0, y=0)
+    Entry(root, textvariable=zoom_link, width=20).place(x=350, y=200)
+    Button(root, text="Submit", font=("Arial", 10), command=zoom_getter).place(x=550, y=270)
+    Entry(root, textvariable=zoom_time, width=10).place(x=40, y=200)
+    OptionMenu(root, zoom_day, *day_list).place(x=200, y=195)
+    Label(root, text="Time:", font=("Arial", 16)).place(x=40, y=150)
+    Label(root, text="Day:", font=("Arial", 16)).place(x=200, y=150)
+    Label(root, text="Link: (Optional)", font=("Arial", 16)).place(x=350, y=150)
+    Button(root, text="Done", font=("Arial", 12), command= lambda: root.destroy()).place(x=500, y=5)
     root.title("ClassAutomation: Zoom")
-    Label(root, text="Build your Zoom schedule!").place(x=40, y=1)
+    Label(root, text="Build your Zoom schedule!", font=("Arial", 14)).place(x=110, y=1)
 
 def gui():
     """Main window to enter schedule details"""
@@ -271,4 +312,22 @@ def gui():
         Label(root, text="Oops!", font=("Arial", 42)).place(x=380, y=190)
     root.mainloop()
 
-gui()
+if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
+    with open(r"C:\Users\Public\Documents\info.json", "r") as info:
+        file_info = json.load(info)
+    while True:
+        date = datetime.datetime.now()
+        main()
+else:
+    webex_path = find_webex()
+    teams_path = find_teams()
+    zoom_path = find_zoom()
+    meet_path = find_browser()
+    init_file(webex_path, teams_path, zoom_path, meet_path)
+    gui()
+    add_to_startup_and_shortcut()
+    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
+        json.dump(file_info, info)
+    while True:
+        date = datetime.datetime.now()
+        main()
