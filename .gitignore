@@ -2,7 +2,7 @@
 .vscode/*
 
 .Python
-__pycache_/*
+__pycache__/*
 dist/*
 build/*
 *.spec
