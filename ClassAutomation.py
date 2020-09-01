@@ -12,6 +12,7 @@ from tkinter import *
 name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
+path = os.path.dirname(os.path.abspath(__file__))
 webex = False
 teams = False
 zoom = False
@@ -299,6 +300,7 @@ def gui():
     root = Tk()
     root.title("ClassAutomation")
     root.geometry("620x310")
+    root.iconbitmap(path + r"\src\icon.ico")
     Label(root, text=f"Welcome to ClassAutomation {name}!", font=("Arial", 18)).place(x=50, y=0)
     if webex == True:
         Button(root, text="Create Cisco Webex schedule", command=gui_webex, font=("Arial", 14)).place(x=145, y=160)
