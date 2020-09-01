@@ -7,10 +7,15 @@ import datetime
 import time
 import win32com.client
 from selenium import webdriver
+from tkinter import *
 
 name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
+webex = True
+teams = False
+zoom = True
+root = ""
 
 def launch_webex(meeting=""):
     """If called, will launch Cisco Webex and join a certain meeting if was specified"""
@@ -73,27 +78,34 @@ def launch_meet(meeting=""):
 
 def find_webex():
     """Function that finds Cisco Webex Meetings executable"""
+    global webex
     path1 = rf'C:\Users\{name}\AppData\Local\WebEx\WebEx\Applications\ptoneclk.exe'
     path2 = rf'C:\Program Files (x86)\Webex\Webex\Applications\ptoneclk.exe'
     if os.path.isfile(path1):
+        webex = True
         return path1
     elif os.path.isfile(path2):
+        webex = True
         return path2
     else:
         return False
 
 def find_teams():
     """Function that finds Microsoft Teams executable"""
+    global teams
     path0 = rf"C:\Users\{name}\AppData\Local\Microsoft\Teams\Update.exe"
     if os.path.isfile(path0):
+        teams = True
         return path0
     else:
         return False
 
 def find_zoom():
     """Function that finds Zoom executable"""
+    global zoom
     path0 = rf"C:\Users\{name}\AppData\Roaming\Zoom\bin\Zoom.exe"
     if os.path.isfile(path0):
+        zoom = True
         return path0
     else:
         return False
@@ -169,22 +181,67 @@ def main():
                         launch_meet(f)
 
 
-if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
-    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
-        file_info = json.load(info)
-    while True:
-        date = datetime.datetime.now()
-        main()
-else:
-    webex_path = find_webex()
-    teams_path = find_teams()
-    zoom_path = find_zoom()
-    meet_path = find_browser()
-    init_file(webex_path, teams_path, zoom_path, meet_path)
-    ask_program()
-    add_to_startup_and_shortcut()
-    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
-        json.dump(file_info, info)
-    while True:
-        date = datetime.datetime.now()
-        main()
+#if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
+#    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
+#        file_info = json.load(info)
+#    while True:
+#        date = datetime.datetime.now()
+#        main()
+#else:
+#    webex_path = find_webex()
+#    teams_path = find_teams()
+#    zoom_path = find_zoom()
+#    meet_path = find_browser()
+#    init_file(webex_path, teams_path, zoom_path, meet_path)
+#    ask_program()
+#    add_to_startup_and_shortcut()
+#    with open(r"C:\Users\Public\Documents\info.json", "w") as info:
+#        json.dump(file_info, info)
+#    while True:
+#        date = datetime.datetime.now()
+#        main()
+
+def gui_webex():
+    """Enter schedule details if Cisco Webex is available"""
+    global webex, teams, zoom
+    Canvas(root, width=1000, height=1000).place(x=0, y=0)
+    root.title("ClassAutomation: Cisco Webex")
+    Label(root, text="Build your Cisco Webex schedule!", font=("Arial", 14)).place(x=110, y=1)
+    if teams == True:
+        Button(root, text="Skip to Microsoft Teams", command=gui_teams, font=("Arial", 7)).place(x=470, y=5)
+    elif zoom == True:
+        Button(root, text="Skip to Zoom", command=gui_teams, font=("Arial", 7)).place(x=470, y=5)
+    
+
+def gui_teams():
+    """Enter schedule details if Microsoft Teams is available"""
+    Canvas(root, width=1000, height=1000).place(x=0, y=0)
+    root.title("ClassAutomation: Microsoft Teams")
+    Label(root, text="Build your Microsoft Teams schedule!").place(x=40, y=0)
+
+def gui_zoom():
+    """Enter schedule details if Zoom is available"""
+    Canvas(root, width=1000, height=1000).place(x=0, y=0)
+    root.title("ClassAutomation: Zoom")
+    Label(root, text="Build your Zoom schedule!").place(x=40, y=0)
+
+def gui():
+    """Main window to enter schedule details"""
+    global root, webex, teams, zoom
+    root = Tk()
+    root.title("ClassAutomation")
+    root.geometry("620x310")
+    Label(root, text=f"Welcome to ClassAutomation {name}!", font=("Arial", 18)).place(x=50, y=0)
+    if webex == True:
+        Button(root, text="Create Cisco Webex schedule", command=gui_webex, font=("Arial", 14)).place(x=145, y=160)
+    elif teams == True:
+        Button(root, text="Create Microsoft Teams schedule", command=gui_teams, font=("Arial", 14)).place(x=140, y=160)
+    elif zoom == True:
+        Button(root, text="Create Zoom schedule", command=gui_zoom, font=("Arial", 14)).place(x=180, y=160)
+    else:
+        Label(root, text="It doesn't seem you have any compatible", font=("Arial", 18)).place(x=10, y=50)
+        Label(root, text="applications in your system, try again later.", font=("Arial", 18)).place(x=10, y=100)
+        Label(root, text="Oops!", font=("Arial", 42)).place(x=380, y=190)
+    root.mainloop()
+
+gui()
