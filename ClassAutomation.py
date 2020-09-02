@@ -298,7 +298,7 @@ def gui():
     root.title("ClassAutomation")
     root.geometry("620x310")
     root.iconbitmap(path + r"\src\icon.ico")
-    Label(root, text="Welcome to ClassAutomation Pisich!", font=("Arial", 18)).place(x=50, y=0)
+    Label(root, text=f"Welcome to ClassAutomation {name}!", font=("Arial", 18)).place(x=50, y=0)
     if webex == True:
         Button(root, text="Create Cisco Webex schedule", command=gui_webex, font=("Arial", 14)).place(x=145, y=160)
     elif teams == True:
