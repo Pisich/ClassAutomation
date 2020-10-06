@@ -161,21 +161,30 @@ def add_to_startup_and_shortcut(file_path=""):
     shortcut.WindowStyle = 7
     shortcut.save()
 
-def time_substraction(time_str, less_time):
-    """Substracts 'less_time' minutes to the 'time_str'"""
+def launch_notification():
+    """Prompts a desktop notification to the user that the program will execute in 5 minutes"""
+    toaster.show_toast("ClassAutomation", "We will be joining your virtual class in 5 minutes!", icon_path="src/icon.ico", duration=5)
 
 def main():
     """Main function of ClassAutomation"""
     global file_info, date
+
     dumpling = file_info["information"]
     day = date.strftime("%A").lower()
     times = date.strftime("%H") + ":" + date.strftime("%M")
+
     if times[0] == "0":
         times = times[1:]
+
+    if int(times[-2:])-5 >= 0: minus5_min = int(times[-2:])-5
+    else: minus5_min = 55
+    
     for i in dumpling:
         if i["needs_to_execute"] == 1:
             dumpling2 = i["days"]
             for f in dumpling2:
+                if day in f and times[:-2] + str(minus5_min) in f:
+                    launch_notification()
                 if day in f and times in f:
                     if "Webex" in i["name"]:
                         launch_webex(f)
@@ -310,9 +319,9 @@ if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
     with open(r"C:\Users\Public\Documents\info.json", "r") as info:
         file_info = json.load(info)
     while True:
-        sleep(50)
         date = datetime.datetime.now()
         main()
+        time.sleep(50)
 else:
     webex_path = find_webex()
     teams_path = find_teams()
@@ -324,6 +333,6 @@ else:
     with open(r"C:\Users\Public\Documents\info.json", "w") as info:
         json.dump(file_info, info)
     while True:
-        sleep(50)
         date = datetime.datetime.now()
         main()
+        time.sleep(50)
