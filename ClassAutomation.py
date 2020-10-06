@@ -8,25 +8,17 @@ import time
 import win32com.client
 from selenium import webdriver
 from tkinter import *
+from win10toast import ToastNotifier
 
+notification = ToastNotifier()
 name = getpass.getuser()
 file_info = ""
 date = datetime.datetime.now()
 path = os.path.dirname(os.path.abspath(__file__))
-webex = False
-teams = False
-zoom = False
-root = ""
-webex_day= ""
-webex_link= ""
-webex_time= ""
-day_list = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-teams_day = ""
-teams_link = ""
-teams_time = ""
-zoom_time = ""
-zoom_day = ""
-zoom_link = ""
+webex = teams = zoom = False
+root = webex_day = webex_link = webex_time = ""
+day_list = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+teams_day = teams_link = teams_time = zoom_time = zoom_day = zoom_link = ""
 
 def launch_webex(meeting=""):
     """If called, will launch Cisco Webex and join a certain meeting if was specified"""
@@ -315,6 +307,7 @@ if os.path.isfile(r"C:\Users\Public\Documents\info.json"):
     with open(r"C:\Users\Public\Documents\info.json", "r") as info:
         file_info = json.load(info)
     while True:
+        sleep(50)
         date = datetime.datetime.now()
         main()
 else:
@@ -328,5 +321,6 @@ else:
     with open(r"C:\Users\Public\Documents\info.json", "w") as info:
         json.dump(file_info, info)
     while True:
+        sleep(50)
         date = datetime.datetime.now()
         main()
