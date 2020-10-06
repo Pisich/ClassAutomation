@@ -183,7 +183,7 @@ def main():
         if i["needs_to_execute"] == 1:
             dumpling2 = i["days"]
             for f in dumpling2:
-                if day in f and times[:-2] + str(minus5_min) in f:
+                if day in f and times[:-2] + str(minus5_min) in date:
                     launch_notification()
                 if day in f and times in f:
                     if "Webex" in i["name"]:
