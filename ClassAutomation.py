@@ -161,6 +161,9 @@ def add_to_startup_and_shortcut(file_path=""):
     shortcut.WindowStyle = 7
     shortcut.save()
 
+def time_substraction(time_str, less_time):
+    """Substracts 'less_time' minutes to the 'time_str'"""
+
 def main():
     """Main function of ClassAutomation"""
     global file_info, date
