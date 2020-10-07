@@ -17,8 +17,8 @@ date = datetime.datetime.now()
 path = os.path.dirname(os.path.abspath(__file__))
 webex = teams = zoom = False
 root = webex_day = webex_link = webex_time = ""
-day_list = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 teams_day = teams_link = teams_time = zoom_time = zoom_day = zoom_link = ""
+day_list = ("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
 
 def launch_webex(meeting=""):
     """If called, will launch Cisco Webex and join a certain meeting if was specified"""
@@ -163,7 +163,7 @@ def add_to_startup_and_shortcut(file_path=""):
 
 def launch_notification():
     """Prompts a desktop notification to the user that the program will execute in 5 minutes"""
-    toaster.show_toast("ClassAutomation", "We will be joining your virtual class in 5 minutes!", icon_path="src/icon.ico", duration=5)
+    notification.show_toast("ClassAutomation", "We will be joining your virtual class in 5 minutes!", icon_path=r"src\icon.ico", duration=5)
 
 def main():
     """Main function of ClassAutomation"""
